@@ -1,0 +1,68 @@
+---
+- name: Deploy Nginx with templated site configuration
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: Install Nginx package
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Ensure Nginx is started and enabled
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Create document root
+      ansible.builtin.file:
+        path: "{{ nginx_root }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Deploy index.html from template
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: "{{ nginx_root }}/index.html"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Deploy site config to sites-available
+      ansible.builtin.template:
+        src: site.conf.j2
+        dest: "/etc/nginx/sites-available/{{ nginx_site_name }}.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Nginx config changed
+
+    - name: Enable site (symlink in sites-enabled)
+      ansible.builtin.file:
+        src: "/etc/nginx/sites-available/{{ nginx_site_name }}.conf"
+        dest: "/etc/nginx/sites-enabled/{{ nginx_site_name }}.conf"
+        state: link
+      notify: Nginx config changed
+
+    - name: Disable default site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Nginx config changed
+
+  handlers:
+    - name: Test Nginx configuration
+      ansible.builtin.command: nginx -t
+      changed_when: false
+      listen: Nginx config changed
+
+    - name: Reload Nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: reloaded
+      listen: Nginx config changed

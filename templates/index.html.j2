@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ ansible_facts['hostname'] }}</title>
+</head>
+<body>
+  <h1>Hello from Ansible!</h1>
+  <ul>
+    <li>Host: {{ ansible_facts['hostname'] }}</li>
+    <li>Server name: {{ nginx_server_name }}</li>
+    <li>Port: {{ nginx_port }}</li>
+    <li>OS: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}</li>
+  </ul>
+</body>
+</html>

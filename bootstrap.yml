@@ -1,0 +1,26 @@
+---
+- name: Bootstrap Python 3 on servers
+  hosts: servers
+  become: true
+
+  # no python
+  gather_facts: false
+
+  tasks:
+    - name: Check whether Python 3 is installed
+      ansible.builtin.raw: dpkg-query -W -f='${Status}' python3 2>/dev/null | grep -q "install ok installed"
+      register: python_check
+      failed_when: false
+      changed_when: false
+
+    - name: Install Python 3 if it is missing
+      ansible.builtin.raw: apt-get update && apt-get install -y python3
+      when: python_check.rc != 0
+      changed_when: true
+
+    - name: Gather facts now that Python is available
+      ansible.builtin.setup:
+
+    - name: Show Python version
+      ansible.builtin.debug:
+        msg: "Python on {{ inventory_hostname }}: {{ ansible_facts['python_version'] }}"

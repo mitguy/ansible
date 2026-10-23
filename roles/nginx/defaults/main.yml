@@ -1,0 +1,14 @@
+---
+nginx_disable_default: true
+
+nginx_sites:
+  - name: site1
+    server_name: site1.local
+    root: /var/www/site1
+    port: 80
+    title: Welcome to site1
+  - name: site2
+    server_name: site2.local
+    root: /var/www/site2
+    port: 80
+    title: Welcome to site2

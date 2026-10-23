@@ -1,0 +1,5 @@
+---
+nginx_port: 80
+nginx_root: /var/www/mysite
+nginx_server_name: web.example.local
+nginx_site_name: mysite

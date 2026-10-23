@@ -1,0 +1,11 @@
+---
+- name: Test Nginx configuration
+  ansible.builtin.command: nginx -t
+  changed_when: false
+  listen: Nginx config changed
+
+- name: Reload Nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: reloaded
+  listen: Nginx config changed

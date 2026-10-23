@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: student
+  description: Install Nginx and configure name-based virtual hosts
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+  galaxy_tags:
+    - nginx
+    - web
+
+dependencies: []

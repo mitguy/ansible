@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ nginx_site.title | default(nginx_site.server_name) }}</title>
+</head>
+<body>
+  <h1>{{ nginx_site.title | default(nginx_site.server_name) }}</h1>
+  <ul>
+    <li>Site: {{ nginx_site.name }}</li>
+    <li>Server name: {{ nginx_site.server_name }}</li>
+    <li>Host: {{ ansible_facts['hostname'] }}</li>
+    <li>Port: {{ nginx_site.port | default(80) }}</li>
+    <li>OS: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}</li>
+  </ul>
+</body>
+</html>
